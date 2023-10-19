@@ -10,6 +10,8 @@ import UIKit
 
 class ViewController: UIViewController {
     
+    @IBOutlet weak var messageLabel: UILabel!
+    
     let eggTimes = ["Soft": 5, "Medium": 7, "Hard": 12]
     
     var secondsRemaining = 0
@@ -18,17 +20,20 @@ class ViewController: UIViewController {
         
         let hardness = sender.currentTitle!
         
-        secondsRemaining = eggTimes[hardness]! * 60
+        secondsRemaining = eggTimes[hardness]! * 1
         
-        let timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true, block: { timer in
-            
-            print(self.secondsRemaining)
-            self.secondsRemaining -= 1
-        })
+        Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
         
-        
-        
-        
+    }
+    
+    @objc func updateTimer() {
+        if secondsRemaining > 0 {
+            secondsRemaining -= 1
+            print(secondsRemaining)
+        }
+        else {
+            messageLabel.text = "Done!"
+        }
     }
     
    
