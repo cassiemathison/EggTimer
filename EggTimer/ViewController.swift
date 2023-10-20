@@ -7,6 +7,9 @@
 //
 
 import UIKit
+import AVFoundation
+
+
 
 class ViewController: UIViewController {
     
@@ -18,13 +21,28 @@ class ViewController: UIViewController {
     
     var secondsPassed = 0
     var totalTime = 0
+    var player: AVAudioPlayer!
     
     @IBAction func hardnessSelected(_ sender: UIButton) {
-        
+        secondsPassed = 0
         let hardness = sender.currentTitle!
         totalTime = eggTimes[hardness]! * 60
         messageLabel.text = hardness
         Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
+        
+    }
+    
+    func playSound() {
+        guard let url = Bundle.main.url(forResource: "alarm_sound", withExtension: "mp3") else {
+            print("File not found")
+            return
+        }
+        do {
+            player = try AVAudioPlayer(contentsOf: url)
+            player.play()
+        } catch {
+            print(error)
+        }
         
     }
     
@@ -36,6 +54,7 @@ class ViewController: UIViewController {
         }
         else {
             messageLabel.text = "Done!"
+            playSound()
             progressBar.progress = 1
         }
     }
